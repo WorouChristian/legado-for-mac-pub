@@ -419,6 +419,8 @@ struct ReaderSettingsView: View {
     @State private var heightText = ""
     @State private var fontSizeText = ""
     @State private var lineSpacingText = ""
+    @State private var isRecordingPrevious = false
+    @State private var isRecordingNext = false
     @FocusState private var isWidthFocused: Bool
     @FocusState private var isHeightFocused: Bool
     @FocusState private var isFontSizeFocused: Bool
@@ -662,7 +664,7 @@ struct ReaderSettingsView: View {
                             .labelsHidden()
                         Spacer()
                     }
-                    
+
                     HStack(spacing: 12) {
                         Text("文字色")
                             .frame(width: 60, alignment: .leading)
@@ -674,9 +676,67 @@ struct ReaderSettingsView: View {
                 }
                 .padding(12)
             }
+
+            // 快捷键设置
+            GroupBox(label: Label("快捷键", systemImage: "keyboard")) {
+                VStack(alignment: .leading, spacing: 16) {
+                    HStack(spacing: 12) {
+                        Text("上一章")
+                            .frame(width: 60, alignment: .leading)
+                            .font(.body)
+
+                        Text(shortcutDisplayText(viewModel.previousChapterShortcut))
+                            .font(.system(.body, design: .monospaced))
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .background(Color.secondary.opacity(0.1))
+                            .cornerRadius(6)
+
+                        Button(isRecordingPrevious ? "按下按键..." : "录制") {
+                            isRecordingPrevious = true
+                            recordShortcut(for: .previous)
+                        }
+                        .disabled(isRecordingPrevious || isRecordingNext)
+
+                        Button("重置") {
+                            viewModel.previousChapterShortcut = .leftArrow
+                        }
+                        .disabled(viewModel.previousChapterShortcut == .leftArrow)
+
+                        Spacer()
+                    }
+
+                    HStack(spacing: 12) {
+                        Text("下一章")
+                            .frame(width: 60, alignment: .leading)
+                            .font(.body)
+
+                        Text(shortcutDisplayText(viewModel.nextChapterShortcut))
+                            .font(.system(.body, design: .monospaced))
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .background(Color.secondary.opacity(0.1))
+                            .cornerRadius(6)
+
+                        Button(isRecordingNext ? "按下按键..." : "录制") {
+                            isRecordingNext = true
+                            recordShortcut(for: .next)
+                        }
+                        .disabled(isRecordingPrevious || isRecordingNext)
+
+                        Button("重置") {
+                            viewModel.nextChapterShortcut = .rightArrow
+                        }
+                        .disabled(viewModel.nextChapterShortcut == .rightArrow)
+
+                        Spacer()
+                    }
+                }
+                .padding(12)
+            }
         }
         .padding()
-        .frame(width: 520, height: 560)
+        .frame(width: 520, height: 680)
         .navigationTitle("阅读设置")
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
@@ -710,6 +770,100 @@ struct ReaderSettingsView: View {
             if !isLineSpacingFocused {
                 lineSpacingText = "\(Int(viewModel.lineSpacing))"
             }
+        }
+    }
+
+    private func shortcutDisplayText(_ shortcut: KeyboardShortcut) -> String {
+        var parts: [String] = []
+
+        for modifier in shortcut.modifiers {
+            switch modifier {
+            case "command": parts.append("⌘")
+            case "option": parts.append("⌥")
+            case "control": parts.append("⌃")
+            case "shift": parts.append("⇧")
+            default: break
+            }
+        }
+
+        switch shortcut.key {
+        case "leftArrow": parts.append("←")
+        case "rightArrow": parts.append("→")
+        case "upArrow": parts.append("↑")
+        case "downArrow": parts.append("↓")
+        case "pageUp": parts.append("Page Up")
+        case "pageDown": parts.append("Page Down")
+        case "space": parts.append("Space")
+        case "return": parts.append("Return")
+        case "escape": parts.append("Esc")
+        default: parts.append(shortcut.key.uppercased())
+        }
+
+        return parts.joined(separator: " ")
+    }
+
+    enum ShortcutTarget {
+        case previous
+        case next
+    }
+
+    private func recordShortcut(for target: ShortcutTarget) {
+        var monitor: Any?
+        monitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
+            let modifiers = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+            let keyCode = event.keyCode
+
+            var modifierStrings: [String] = []
+            if modifiers.contains(.command) { modifierStrings.append("command") }
+            if modifiers.contains(.option) { modifierStrings.append("option") }
+            if modifiers.contains(.control) { modifierStrings.append("control") }
+            if modifiers.contains(.shift) { modifierStrings.append("shift") }
+
+            let keyString = self.keyCodeToString(keyCode)
+            let newShortcut = KeyboardShortcut(key: keyString, modifiers: modifierStrings)
+
+            // 移除监听器
+            if let monitor = monitor {
+                NSEvent.removeMonitor(monitor)
+            }
+
+            // 更新快捷键
+            DispatchQueue.main.async {
+                switch target {
+                case .previous:
+                    if newShortcut != self.viewModel.nextChapterShortcut {
+                        self.viewModel.previousChapterShortcut = newShortcut
+                    }
+                    self.isRecordingPrevious = false
+                case .next:
+                    if newShortcut != self.viewModel.previousChapterShortcut {
+                        self.viewModel.nextChapterShortcut = newShortcut
+                    }
+                    self.isRecordingNext = false
+                }
+            }
+
+            return nil
+        }
+    }
+
+    private func keyCodeToString(_ keyCode: UInt16) -> String {
+        switch keyCode {
+        case 123: return "leftArrow"
+        case 124: return "rightArrow"
+        case 126: return "upArrow"
+        case 125: return "downArrow"
+        case 116: return "pageUp"
+        case 121: return "pageDown"
+        case 49: return "space"
+        case 36: return "return"
+        case 53: return "escape"
+        default:
+            if keyCode <= 25 {
+                let char = Character(UnicodeScalar(keyCode + 97)!)
+                return String(char)
+            }
+            return "unknown"
         }
     }
 }
@@ -746,13 +900,25 @@ class ReaderViewModel: ObservableObject {
     @Published var textColor: Color = .black {
         didSet { saveConfig() }
     }
-    
+    @Published var previousChapterShortcut: KeyboardShortcut = .leftArrow {
+        didSet {
+            saveConfig()
+            setupKeyboardShortcuts()
+        }
+    }
+    @Published var nextChapterShortcut: KeyboardShortcut = .rightArrow {
+        didSet {
+            saveConfig()
+            setupKeyboardShortcuts()
+        }
+    }
+
     // 滚动位置
     @Published var savedScrollPosition: CGFloat = 0  // 保存的滚动百分比（0-10000）
     var shouldRestoreScroll: Bool = false  // 是否需要恢复滚动位置
     var currentScrollOffset: CGFloat = 0  // 当前滚动偏移量
     var contentHeight: CGFloat = 0  // 内容高度
-    
+
     private var book: Book
     private let bookSourceDAO = BookSourceDAO()
     private let bookChapterDAO = BookChapterDAO()
@@ -761,6 +927,7 @@ class ReaderViewModel: ObservableObject {
     private var isLoadingConfig = false  // 防止加载配置时触发保存
     private var preloadTask: Task<Void, Never>?  // 预加载任务
     private var lastPreloadStartIndex: Int = -1  // 上次预加载的起始章节索引
+    private var keyboardMonitor: Any?  // 快捷键监听器
     
     init(book: Book) {
         self.book = book
@@ -769,6 +936,7 @@ class ReaderViewModel: ObservableObject {
         self.shouldRestoreScroll = (book.durChapterPos > 0)
         print("📖 [ReaderView] 初始化 - book.durChapterIndex: \(book.durChapterIndex), durChapterPos: \(book.durChapterPos), 书名: \(book.name)")
         loadConfig()
+        setupKeyboardShortcuts()
     }
     
     func initialize() async {
@@ -1156,7 +1324,7 @@ class ReaderViewModel: ObservableObject {
     private func loadConfig() {
         isLoadingConfig = true
         let config = ReaderConfig.load()
-        
+
         pageWidth = config.pageWidth
         pageHeight = config.pageHeight
         fontSize = config.fontSize
@@ -1164,15 +1332,17 @@ class ReaderViewModel: ObservableObject {
         backgroundColor = config.getBackgroundColor()
         textColor = config.getTextColor()
         showToolbar = config.showToolbar
-        
+        previousChapterShortcut = config.previousChapterShortcut
+        nextChapterShortcut = config.nextChapterShortcut
+
         isLoadingConfig = false
         print("已加载阅读器配置")
     }
-    
+
     /// 保存配置
     private func saveConfig() {
         guard !isLoadingConfig else { return }  // 加载配置时不保存
-        
+
         let config = ReaderConfig(
             pageWidth: pageWidth,
             pageHeight: pageHeight,
@@ -1180,9 +1350,92 @@ class ReaderViewModel: ObservableObject {
             lineSpacing: lineSpacing,
             backgroundColor: ReaderConfig.colorToHex(backgroundColor),
             textColor: ReaderConfig.colorToHex(textColor),
-            showToolbar: showToolbar
+            showToolbar: showToolbar,
+            previousChapterShortcut: previousChapterShortcut,
+            nextChapterShortcut: nextChapterShortcut
         )
         config.save()
+    }
+
+    // MARK: - 快捷键管理
+
+    private func setupKeyboardShortcuts() {
+        removeKeyboardShortcuts()
+
+        keyboardMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
+            guard let self = self else { return event }
+
+            let modifiers = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+            let keyCode = event.keyCode
+
+            if self.matchesShortcut(keyCode: keyCode, modifiers: modifiers, shortcut: self.previousChapterShortcut) {
+                Task { @MainActor in
+                    await self.previousChapter()
+                }
+                return nil
+            }
+
+            if self.matchesShortcut(keyCode: keyCode, modifiers: modifiers, shortcut: self.nextChapterShortcut) {
+                Task { @MainActor in
+                    await self.nextChapter()
+                }
+                return nil
+            }
+
+            return event
+        }
+    }
+
+    private func removeKeyboardShortcuts() {
+        if let monitor = keyboardMonitor {
+            NSEvent.removeMonitor(monitor)
+            keyboardMonitor = nil
+        }
+    }
+
+    private func matchesShortcut(keyCode: UInt16, modifiers: NSEvent.ModifierFlags, shortcut: KeyboardShortcut) -> Bool {
+        let keyMatches = keyCodeMatches(keyCode, key: shortcut.key)
+        let modifiersMatch = modifiersMatch(modifiers, expected: shortcut.modifiers)
+        return keyMatches && modifiersMatch
+    }
+
+    private func keyCodeMatches(_ keyCode: UInt16, key: String) -> Bool {
+        switch key {
+        case "leftArrow": return keyCode == 123
+        case "rightArrow": return keyCode == 124
+        case "upArrow": return keyCode == 126
+        case "downArrow": return keyCode == 125
+        case "pageUp": return keyCode == 116
+        case "pageDown": return keyCode == 121
+        case "space": return keyCode == 49
+        case "return": return keyCode == 36
+        case "escape": return keyCode == 53
+        default:
+            if key.count == 1, let char = key.lowercased().first {
+                let charCode = Int(char.asciiValue ?? 0)
+                if charCode >= 97 && charCode <= 122 {
+                    let expectedKeyCode = UInt16(charCode - 97)
+                    return keyCode == expectedKeyCode
+                }
+            }
+            return false
+        }
+    }
+
+    private func modifiersMatch(_ actual: NSEvent.ModifierFlags, expected: [String]) -> Bool {
+        var expectedFlags: NSEvent.ModifierFlags = []
+        for modifier in expected {
+            switch modifier {
+            case "command": expectedFlags.insert(.command)
+            case "option": expectedFlags.insert(.option)
+            case "control": expectedFlags.insert(.control)
+            case "shift": expectedFlags.insert(.shift)
+            default: break
+            }
+        }
+
+        let relevantFlags: NSEvent.ModifierFlags = [.command, .option, .control, .shift]
+        return actual.intersection(relevantFlags) == expectedFlags
     }
 }
 

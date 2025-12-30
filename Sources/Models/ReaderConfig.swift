@@ -1,6 +1,17 @@
 import Foundation
 import SwiftUI
 
+/// 快捷键配置
+struct KeyboardShortcut: Codable, Equatable {
+    var key: String
+    var modifiers: [String]
+
+    static let leftArrow = KeyboardShortcut(key: "leftArrow", modifiers: [])
+    static let rightArrow = KeyboardShortcut(key: "rightArrow", modifiers: [])
+    static let pageUp = KeyboardShortcut(key: "pageUp", modifiers: [])
+    static let pageDown = KeyboardShortcut(key: "pageDown", modifiers: [])
+}
+
 /// 阅读器配置管理类
 class ReaderConfig: Codable {
     var pageWidth: CGFloat
@@ -10,6 +21,8 @@ class ReaderConfig: Codable {
     var backgroundColor: String  // 颜色的十六进制表示
     var textColor: String
     var showToolbar: Bool
+    var previousChapterShortcut: KeyboardShortcut
+    var nextChapterShortcut: KeyboardShortcut
     
     init(
         pageWidth: CGFloat = 900,
@@ -18,7 +31,9 @@ class ReaderConfig: Codable {
         lineSpacing: CGFloat = 8,
         backgroundColor: String = "#FFFFFF",
         textColor: String = "#000000",
-        showToolbar: Bool = true
+        showToolbar: Bool = true,
+        previousChapterShortcut: KeyboardShortcut = .leftArrow,
+        nextChapterShortcut: KeyboardShortcut = .rightArrow
     ) {
         self.pageWidth = pageWidth
         self.pageHeight = pageHeight
@@ -27,6 +42,8 @@ class ReaderConfig: Codable {
         self.backgroundColor = backgroundColor
         self.textColor = textColor
         self.showToolbar = showToolbar
+        self.previousChapterShortcut = previousChapterShortcut
+        self.nextChapterShortcut = nextChapterShortcut
     }
     
     // MARK: - 文件路径
